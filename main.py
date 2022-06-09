@@ -1,8 +1,6 @@
 # Copyright (c) 2015-present, Facebook, Inc.
 # All rights reserved.
 
-import os
-os.environ['CUDA_VISIBLE_DEVICES']='5'
 import argparse
 import datetime
 import numpy as np
@@ -31,8 +29,7 @@ import utils
 import collections
 from tensorboardX import SummaryWriter
 writer = SummaryWriter()
-# id=1
-# torch.cuda.set_device(id)
+
 
 def get_args_parser():
     parser = argparse.ArgumentParser('PVT training and evaluation script', add_help=False)

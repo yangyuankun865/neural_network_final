@@ -35,7 +35,7 @@ def get_args_parser():
     parser = argparse.ArgumentParser('PVT training and evaluation script', add_help=False)
     parser.add_argument('--fp32-resume', action='store_true', default=False)
     parser.add_argument('--batch-size', default=256, type=int) # final: 128
-    parser.add_argument('--epochs', default=30, type=int)
+    parser.add_argument('--epochs', default=50, type=int)
     parser.add_argument('--config', required=True, type=str, help='config')
 
     # Model parameters
@@ -196,7 +196,7 @@ def main(args):
     # fix the seed for reproducibility
         # lr 1e-5 7.29, 5e-4 9.25 , 2e-4 15.04, 1e-4 16.66, 5e-3 1
     # (batch=256)wd 1e-3 16.37, 1e-4 14.97, 1e-5 13.77, 1e-6 16.69, 1e-7 15.84
-    for seed in [200,200,300,400,500,600]: 
+    for seed in [100,200,300,400,500,600]: 
                 # args.weight_decay = 1e-6
         # args.lr = lr
         # print("weight-decay", args.weight_decay, "learning rate", args.lr) 

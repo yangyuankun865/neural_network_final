@@ -35,13 +35,13 @@ def get_args_parser():
     parser = argparse.ArgumentParser('PVT training and evaluation script', add_help=False)
     parser.add_argument('--fp32-resume', action='store_true', default=False)
     parser.add_argument('--batch-size', default=256, type=int) # final: 128
-    parser.add_argument('--epochs', default=50, type=int)
+    parser.add_argument('--epochs', default=100, type=int)
     parser.add_argument('--config', required=True, type=str, help='config')
 
     # Model parameters
     parser.add_argument('--model', default='pvt_small', type=str, metavar='MODEL',
                         help='Name of model to train')
-    parser.add_argument('--input-size', default=224, type=int, help='images input size')
+    parser.add_argument('--input-size', default=32, type=int, help='images input size')
 
     parser.add_argument('--drop', type=float, default=0.0, metavar='PCT',
                         help='Dropout rate (default: 0.)')
@@ -83,7 +83,7 @@ def get_args_parser():
     parser.add_argument('--min-lr', type=float, default=1e-5, metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0 (1e-5)')
 
-    parser.add_argument('--decay-epochs', type=float, default=3, metavar='N',
+    parser.add_argument('--decay-epochs', type=float, default=10, metavar='N',
                         help='epoch interval to decay LR')
     parser.add_argument('--warmup-epochs', type=int, default=0, metavar='N',
                         help='epochs to warmup LR, if scheduler supports')
@@ -144,9 +144,9 @@ def get_args_parser():
     parser.add_argument('--finetune', default='', help='finetune from checkpoint')
 
     # Dataset parameters
-    parser.add_argument('--data-path', default='/datasets01/imagenet_full_size/061417/', type=str,
+    parser.add_argument('--data-path', default='./CIFAR/', type=str,
                         help='dataset path')
-    parser.add_argument('--data-set', default='IMNET', choices=['CIFAR', 'IMNET', 'INAT', 'INAT19'],
+    parser.add_argument('--data-set', default='CIFAR', choices=['CIFAR', 'IMNET', 'INAT', 'INAT19'],
                         type=str, help='Image Net dataset path')
     parser.add_argument('--use-mcloader', action='store_true', default=False, help='Use mcloader')
     parser.add_argument('--inat-category', default='name',
@@ -305,6 +305,7 @@ def main(args):
         model_without_ddp = model
         if args.distributed:
             model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
+            # model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[3,4],output_device=3)
             model_without_ddp = model.module
         n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
         print('number of params:', n_parameters)
